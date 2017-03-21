@@ -10,13 +10,21 @@ import com.iugu.model.Customer;
 import com.iugu.responses.CustomerResponse;
 
 public class CustomerService {
+	private final Iugu iugu;
 	private final String CREATE_URL = Iugu.url("/customers");
 	private final String FIND_URL = Iugu.url("/customers/%s");
 	private final String CHANGE_URL = Iugu.url("/customers/%s");
 	private final String REMOVE_URL = Iugu.url("/customers/%s");
 	
+	public CustomerService() {
+		iugu = Iugu.get();
+	}
+	public CustomerService(final Iugu IuguCfg) {
+		iugu = IuguCfg;
+	}
+	
 	public CustomerResponse create(Customer customer) throws IuguException {
-		Response response = Iugu.getClient()
+		Response response = iugu.getClient()
 								.target(CREATE_URL)
 								.request()
 								.post(Entity.entity(customer, MediaType.APPLICATION_JSON));
@@ -37,7 +45,7 @@ public class CustomerService {
 	}
 	
 	public CustomerResponse find(String id) throws IuguException {
-		Response response = Iugu.getClient()
+		Response response = iugu.getClient()
 								.target(String.format(FIND_URL, id))
 								.request()
 								.get();
@@ -58,7 +66,7 @@ public class CustomerService {
 	}
 	
 	public CustomerResponse change(String id, Customer customer) throws IuguException {
-		Response response = Iugu.getClient()
+		Response response = iugu.getClient()
 								.target(String.format(CHANGE_URL, id))
 								.request()
 								.put(Entity.entity(customer, MediaType.APPLICATION_JSON));
@@ -79,7 +87,7 @@ public class CustomerService {
 	}
 	
 	public CustomerResponse remove(String id) throws IuguException {
-		Response response = Iugu.getClient().target(String.format(REMOVE_URL, id))
+		Response response = iugu.getClient().target(String.format(REMOVE_URL, id))
 										    .request()
 										    .delete();
 		

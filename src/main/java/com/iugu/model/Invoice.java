@@ -14,7 +14,6 @@ import com.iugu.serializers.DateSerializer;
 import com.iugu.serializers.JsonFormat;
 
 public class Invoice implements Serializable {
-
 	private static final long serialVersionUID = 1719931730355279382L;
 
 	/**

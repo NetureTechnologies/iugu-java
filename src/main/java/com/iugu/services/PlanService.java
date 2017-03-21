@@ -10,14 +10,22 @@ import com.iugu.model.Plan;
 import com.iugu.responses.PlanResponse;
 
 public class PlanService {
+	private final Iugu iugu;
 	private final String CREATE_URL = Iugu.url("/plans");
 	private final String FIND_URL = Iugu.url("/plans/%s");
 	private final String FIND_BY_IDENTIFIER_URL = Iugu.url("/plans/identifier/%s");
 	private final String CHANGE_URL = Iugu.url("/plans/%s");
 	private final String REMOVE_URL = Iugu.url("/plans/%s");
 	
+	public PlanService() {
+		iugu = Iugu.get();
+	}
+	public PlanService(final Iugu IuguCfg) {
+		iugu = IuguCfg;
+	}
+	
 	public PlanResponse create(Plan plan) throws IuguException {
-		Response response = Iugu.getClient()
+		Response response = iugu.getClient()
 								.target(CREATE_URL)
 								.request()
 								.post(Entity.entity(plan, MediaType.APPLICATION_JSON));
@@ -38,7 +46,7 @@ public class PlanService {
 	}
 	
 	public PlanResponse find(String id) throws IuguException {
-		Response response = Iugu.getClient()
+		Response response = iugu.getClient()
 								.target(String.format(FIND_URL, id))
 								.request()
 								.get();
@@ -59,7 +67,7 @@ public class PlanService {
 	}
 	
 	public PlanResponse findByIdentifier(String id) throws IuguException {
-		Response response = Iugu.getClient()
+		Response response = iugu.getClient()
 								.target(String.format(FIND_BY_IDENTIFIER_URL, id))
 								.request()
 								.get();
@@ -80,7 +88,7 @@ public class PlanService {
 	}
 	
 	public PlanResponse change(String id, Plan plan) throws IuguException {
-		Response response = Iugu.getClient()
+		Response response = iugu.getClient()
 								.target(String.format(CHANGE_URL, id))
 								.request()
 								.put(Entity.entity(plan, MediaType.APPLICATION_JSON));
@@ -102,7 +110,7 @@ public class PlanService {
 	}
 	
 	public PlanResponse remove(String id) throws IuguException {
-		Response response = Iugu.getClient().target(String.format(REMOVE_URL, id))
+		Response response = iugu.getClient().target(String.format(REMOVE_URL, id))
 											.request()
 											.delete();
 		

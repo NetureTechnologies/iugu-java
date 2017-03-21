@@ -1,4 +1,4 @@
-package com.iugu;
+package com.iugu.auth;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

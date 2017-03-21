@@ -15,15 +15,23 @@ import com.iugu.responses.InvoiceResponse;
 import com.iugu.utils.ConvertionUtils;
 
 public class InvoiceService {
+	private final Iugu iugu;
 	private final String CREATE_URL = Iugu.url("/invoices");
 	private final String FIND_URL = Iugu.url("/invoices/%s");
 	private final String DUPLICATE_URL = Iugu.url("/invoices/%s/duplicate");
 	private final String REMOVE_URL = Iugu.url("/invoices/%s");
 	private final String CANCEL_URL = Iugu.url("/invoices/%s/cancel");
 	private final String REFUND_URL = Iugu.url("/invoices/%s/refund");
+	
+	public InvoiceService() {
+		iugu = Iugu.get();
+	}
+	public InvoiceService(final Iugu IuguCfg) {
+		iugu = IuguCfg;
+	}
 
 	public InvoiceResponse create(Invoice invoice) throws IuguException {
-		Response response = Iugu.getClient()
+		Response response = iugu.getClient()
 								.target(CREATE_URL)
 								.request()
 								.post(Entity.entity(invoice, MediaType.APPLICATION_JSON));
@@ -44,7 +52,7 @@ public class InvoiceService {
 	}
 	
 	public InvoiceResponse find(String id) throws IuguException {
-		Response response = Iugu.getClient()
+		Response response = iugu.getClient()
 								.target(String.format(FIND_URL, id))
 								.request()
 								.get();
@@ -70,7 +78,7 @@ public class InvoiceService {
 
 		form.param("due_date", sm.format(date));
 
-		Response response = Iugu.getClient()
+		Response response = iugu.getClient()
 								.target(String.format(DUPLICATE_URL, id))
 								.request()
 								.post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
@@ -98,7 +106,7 @@ public class InvoiceService {
 		form.param("ignore_canceled_email", ConvertionUtils.booleanToString(ignoreCanceledEmail));
 		form.param("current_fines_option", ConvertionUtils.booleanToString(currentFinesOption));
 
-		Response response = Iugu.getClient()
+		Response response = iugu.getClient()
 								.target(String.format(DUPLICATE_URL, id))
 								.request()
 								.post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
@@ -119,7 +127,7 @@ public class InvoiceService {
 	}
 	
 	public InvoiceResponse remove(String id) throws IuguException {
-		Response response = Iugu.getClient()
+		Response response = iugu.getClient()
 								.target(String.format(REMOVE_URL, id))
 								.request()
 								.delete();
@@ -140,7 +148,7 @@ public class InvoiceService {
 	}
 	
 	public InvoiceResponse cancel(String id) {
-		Response response = Iugu.getClient()
+		Response response = iugu.getClient()
 								.target(String.format(CANCEL_URL, id))
 								.request()
 								.put(null);
@@ -152,7 +160,7 @@ public class InvoiceService {
 	}
 	
 	public InvoiceResponse refund(String id) throws IuguException {
-		Response response = Iugu.getClient()
+		Response response = iugu.getClient()
 								.target(String.format(REFUND_URL, id))
 								.request()
 								.post(null);
